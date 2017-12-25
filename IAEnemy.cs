@@ -14,7 +14,7 @@ public class IAEnemy : MonoBehaviour {
 	}
 
     void EnemiesList()
-    {
+    {   //get enemy list
         GameObject []AllUnitsList = GameObject.FindGameObjectsWithTag("units");
         EnemyTab = new GameObject[(int)Map.UnitsNb - Map.NumberOfEnemies];
         int Parseur = 0;
@@ -26,7 +26,7 @@ public class IAEnemy : MonoBehaviour {
                 Parseur++;
             }
         }
-    }   //get enemy list
+    }
 	
     GameObject GetNearestEnemy(GameObject [] EnemyList){
         //Vector2 ThisUnitPos = new Vector2(ThisUnitScript.PosX, ThisUnitScript.PosZ);
@@ -68,20 +68,20 @@ public class IAEnemy : MonoBehaviour {
         GameObject NearEn = GetNearestEnemy(EnemyTab);
         Debug.Log("Nearest enemy "+EnemyTab[0]);
         if (NearEn == null) //no more player on the current play
-            print("Defeat");
+            print("Defeat");	//the player loose
         else
         {
             Mypos = new Vector2(ThisUnitScript.PosX, ThisUnitScript.PosZ);
             HisPos = new Vector2(NearEn.GetComponent<Unit>().PosX, NearEn.GetComponent<Unit>().PosZ);
             if (Map.CanShootAt(Mypos, HisPos, ThisUnitScript.currentTP, ThisUnitScript.ActualWeap))
             //if(false)
-            {   //shoot at him
+            {   //if can shoot, shoot at him
                 while(ThisUnitScript.currentTP>=ThisUnitScript.ActualWeap.Cost && NearEn.GetComponent<Unit>().ActualLife>0){
                     Map.UseWeapon(ThisUnitScript.ActualWeap, this.gameObject, NearEn);
                     Debug.LogWarning(gameObject.name + " use his weapon " + ThisUnitScript.ActualWeap.Name + " on " + NearEn.name);
                 }
                 if (NearEn.GetComponent<Unit>().ActualLife <= 0)
-                {
+                {	//if we destroy this unit
                     Debug.LogError(gameObject.name + " destroy your unit " + NearEn.name);
                     Destroy(NearEn);
                     EnemiesList();
